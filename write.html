@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="{CHARSET}">
+		<title></title>
+		<style>
+			canvas{
+				display: block;
+				margin: 20px auto;
+				border: 2px solid gray;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="450px" height="450px"></canvas>
+		<script>
+			var canvans = document.getElementById("canvas");
+			var context = canvans.getContext("2d");
+			
+			var onoff = false;
+			var last = "";
+			Grid()
+			canvans.onmousedown = function(e){
+				e.preventDefault();
+				onoff = true;
+				last = clientXY(e.clientX,e.clientY);
+				console.log(last)
+			}
+			canvans.onmouseup = function(e){
+				e.preventDefault();
+				onoff = false;
+			}
+			canvans.onmousemove = function(e){
+				e.preventDefault();
+				if(onoff){
+					var cur = clientXY(e.clientX,e.clientY);//新的点击
+					context.beginPath();
+					context.moveTo(last.x,last.y)
+					context.lineTo(cur.x,cur.y)
+					context.strokeStyle = "#FF0000";
+					context.stroke();
+					last = cur;
+				}
+			}
+			canvans.ontouchstart = function(e){
+				e.preventDefault();
+				onoff = true;
+				last = clientXY(e.clientX,e.clientY);
+				console.log(last)
+			}
+			canvans.ontouchend = function(e){
+				e.preventDefault();
+				onoff = false;
+			}
+			canvans.ontouchmove = function(e){
+				e.preventDefault();
+				if(onoff){
+					var cur = clientXY(e.clientX,e.clientY);//新的点击
+					context.beginPath();
+					context.moveTo(last.x,last.y)
+					context.lineTo(cur.x,cur.y)
+					context.strokeStyle = "#FF0000";
+					context.stroke();
+					last = cur;
+				}
+			}
+			canvans.onmouseout = function(e){
+				e.preventDefault();
+				onoff = false;
+			}
+			function clientXY(x,y){
+				var box = canvans.getBoundingClientRect();
+				return{x:Math.round(x-box.left),y:Math.round(y-box.top)}
+			}
+			function Grid(){
+				context.save()
+				context.beginPath()//开始绘制
+				context.moveTo(0,0)
+				context.lineTo(450,450)
+				
+				context.moveTo(450,0)
+				context.lineTo(0,450)
+				
+				context.moveTo(450/2,0)
+				context.lineTo(450/2,450)
+	
+				context.moveTo(0,450/2)
+				context.lineTo(450,450/2)
+				context.lineWidth = 1;
+				context.stroke()
+				
+				context.restore()
+			}
+			
+		</script>
+	</body>
+</html>
